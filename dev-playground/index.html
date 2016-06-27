@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>pdfbuilder.js</title>
+
+        <link rel="stylesheet" href="/bower_components/codemirror/lib/codemirror.css" charset="utf-8">
+        <link rel="stylesheet" href="/bower_components/codemirror/addon/hint/show-hint.css" charset="utf-8">
+        <link rel="stylesheet" href="/bower_components/codemirror/theme/icecoder.css" charset="utf-8">
+
+        <style>
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .CodeMirror, #viewer {
+                width: 50%;
+            }
+
+            .CodeMirror {
+                height: 500px;
+            }
+
+            #viewer {
+                padding-left: 10px;
+                float: right;
+            }
+
+            #run {
+                width: 50%;
+                border: medium none;
+                height: 50px;
+                background-color: rgb(119, 102, 85);
+                color: rgb(255, 255, 255);
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>pdfbuilder.js</h1>
+
+        <button type="button" id="run">Run</button>
+
+        <object id="viewer" data="" type="application/pdf" width="100%" height="500">
+        </object>
+
+        <textarea name="code" id="code" rows="8" cols="40">
+var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+var loremFormatted = '<p>Lorem <b>ipsum</b></p><h1-center>dolor</h1-center><p>sit amet, <i>consectetur adipiscing</i> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <b>commodo</b> <i>consequat.</i></p>';
+var blockquote = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
+var pdf = new PdfBuilderJS();
+
+pdf.text('Text title').style('h1').center();
+pdf.text(lorem).style('p').justify().indent();
+
+pdf.text('Subtitle').style('h2');
+pdf.text(function (text) {
+   text.justify();
+
+   text.textRow(lorem).style('p');
+   text.textRow(function(textRow) {
+       textRow.style('p');
+       textRow.subText('Olá');
+       textRow.subText(' bold').bold();
+       textRow.subText(' and italic.').italics();
+   });
+
+   text.textRow(lorem).bold().fontSize(13);
+ });
+
+/*pdf.addStyle('blockquote', {
+    margin: [150, 10, 0, 10],
+    alignment: 'justify'
+});
+
+pdf.addStyle('h1-center', _.extend(pdf.docDefinition.styles.h1, {
+    alignment: 'center'
+}));
+
+pdf.textFormatted(loremFormatted);
+
+ pdf.text('Text title').style('h1').center();
+
+pdf.text(lorem).style('p');
+pdf.text(lorem).style('p').justify().indent();
+
+pdf.text('Text Subtitle').style('h2');
+pdf.textFormatted(loremFormatted); // accept tags <b> and <i>
+pdf.text(blockquote).style('blockquote');
+
+ */
+
+// pdf.row(function(row) {
+//     row.column(function(column) {
+//         column.text(lorem).justify();
+//     });
+//
+//   	row.column().text(lorem).justify();
+//
+// });
+
+        </textarea>
+
+        <script src="/bower_components/codemirror/lib/codemirror.js" charset="utf-8"></script>
+        <script src="/bower_components/codemirror/mode/javascript/javascript.js" charset="utf-8"></script>
+        <script src="/bower_components/codemirror/addon/hint/show-hint.js" charset="utf-8"></script>
+        <script src="/bower_components/codemirror/addon/hint/javascript-hint.js" charset="utf-8"></script>
+        <script data-main="dev-playground/main" src="/bower_components/requirejs/require.js"></script>
+
+    </body>
+</html>
